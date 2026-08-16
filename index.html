@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A beautiful birthday surprise made especially for Ayesha by Faizan Khokhar.">
+  <title>Bestie Birthday Surprise — Ayesha</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="background-glow glow-one" aria-hidden="true"></div>
+  <div class="background-glow glow-two" aria-hidden="true"></div>
+
+  <div class="balloons" aria-hidden="true">
+    <span class="balloon balloon-one">🎈</span>
+    <span class="balloon balloon-two">🎈</span>
+    <span class="balloon balloon-three">🎈</span>
+    <span class="balloon balloon-four">🎈</span>
+  </div>
+
+  <div class="floating-decorations" aria-hidden="true">
+    <span>✦</span>
+    <span>♡</span>
+    <span>✧</span>
+    <span>🌸</span>
+    <span>✨</span>
+    <span>🌹</span>
+  </div>
+
+  <main class="page-shell">
+    <section class="surprise-card" id="surpriseCard" aria-live="polite">
+      <div class="card-shine" aria-hidden="true"></div>
+
+      <header class="hero-header">
+        <p class="eyebrow">A LITTLE SURPRISE FROM FAIZAN KHOKHAR</p>
+        <div class="progress" id="progress" aria-label="Birthday surprise progress">
+          <span class="dot active" data-stage="0"></span>
+          <span class="dot" data-stage="1"></span>
+          <span class="dot" data-stage="2"></span>
+          <span class="dot" data-stage="3"></span>
+          <span class="dot" data-stage="4"></span>
+          <span class="dot" data-stage="5"></span>
+        </div>
+      </header>
+
+      <div class="flower-row" aria-hidden="true">🌸 🌷 🌹 🌷 🌸</div>
+
+      <div class="content-grid">
+        <div class="text-content">
+          <p class="stage-label" id="stageLabel">SURPRISE 01 OF 06</p>
+          <h1 id="stageTitle">Happy Birthday Dear Ayesha</h1>
+          <div class="title-line" aria-hidden="true"></div>
+
+          <div class="message" id="stageMessage">
+            <p>A beautiful surprise made especially for you. 💗</p>
+          </div>
+
+          <div class="signature" id="signature">
+            <span>With love &amp; warm wishes</span>
+            <strong>Faizan Khokhar ❤️</strong>
+          </div>
+
+          <button class="surprise-button" id="nextButton" type="button">
+            <span id="buttonText">Open The Next Surprise ➜</span>
+          </button>
+        </div>
+
+        <div class="photo-frame">
+          <div class="photo-glow" aria-hidden="true"></div>
+          <div class="photo-wrap">
+            <img id="stagePhoto" src="./assets/photo1.jpg" alt="Birthday memory for Ayesha">
+            <div class="photo-fallback" id="photoFallback" hidden>
+              <span>🌸</span>
+              <strong>A Special Memory</strong>
+              <small>Add the requested photo to the assets folder.</small>
+            </div>
+          </div>
+          <div class="photo-caption">A little moment, made brighter ✨</div>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        <span>Made especially for Ayesha</span>
+        <span>🎁 💗 🎂</span>
+      </footer>
+    </section>
+  </main>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <script src="./script.js"></script>
+</body>
+</html>
