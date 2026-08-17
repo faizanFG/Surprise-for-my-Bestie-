@@ -11,23 +11,23 @@ style.css
 script.js
 README.txt
 assets/
-  photo1.jpg
-  photo2.jpg
-  photo3.jpg
-  photo4.jpg
-  photo5.jpg
-  photo6.jpg
+  photo1.jpeg
+  photo2.jpeg
+  photo3.jpeg
+  photo4.jpeg
+  photo5.jpeg
+  photo6.jpeg
 
 PHOTO SETUP
 -----------
 The website expects these exact relative paths:
 
-./assets/photo1.jpg
-./assets/photo2.jpg
-./assets/photo3.jpg
-./assets/photo4.jpg
-./assets/photo5.jpg
-./assets/photo6.jpg
+./assets/photo1.jpeg
+./assets/photo2.jpeg
+./assets/photo3.jpeg
+./assets/photo4.jpeg
+./assets/photo5.jpeg
+./assets/photo6.jpeg
 
 Replace the included placeholder JPEG files with your own photos using the
 same filenames. The website also has a graceful fallback if an image is
@@ -66,12 +66,12 @@ style.css
 script.js
 README.txt
 assets/
-  photo1.jpg
-  photo2.jpg
-  photo3.jpg
-  photo4.jpg
-  photo5.jpg
-  photo6.jpg
+  photo1.jpeg
+  photo2.jpeg
+  photo3.jpeg
+  photo4.jpeg
+  photo5.jpeg
+  photo6.jpeg
 
 No build command is required.
 
