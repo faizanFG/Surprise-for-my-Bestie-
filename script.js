@@ -217,23 +217,22 @@ document.addEventListener("DOMContentLoaded", () => {
   updateStage();
 });
 
-const photoInput = document.getElementById("photoInput");
-const stagePhoto = document.getElementById("stagePhoto");
-const uploadContent = document.getElementById("uploadContent");
+document.addEventListener("DOMContentLoaded", () => {
+  const photoInput = document.getElementById("photoInput");
+  const stagePhoto = document.getElementById("stagePhoto");
+  const uploadContent = document.getElementById("uploadContent");
 
-photoInput.addEventListener("change", function () {
-  const file = this.files[0];
+  if (!photoInput || !stagePhoto || !uploadContent) return;
 
-  if (!file) return;
+  photoInput.addEventListener("change", function () {
+    const file = this.files[0];
 
-  if (!file.type.startsWith("image/")) {
-    alert("Please select an image file.");
-    return;
-  }
+    if (!file || !file.type.startsWith("image/")) return;
 
-  const imageURL = URL.createObjectURL(file);
+    const imageURL = URL.createObjectURL(file);
 
-  stagePhoto.src = imageURL;
-  stagePhoto.hidden = false;
-  uploadContent.style.display = "none";
+    stagePhoto.src = imageURL;
+    stagePhoto.hidden = false;
+    uploadContent.style.display = "none";
+  });
 });
