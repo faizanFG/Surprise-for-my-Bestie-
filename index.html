@@ -64,20 +64,19 @@
             <span id="buttonText">Open The Next Surprise ➜</span>
           </button>
         </div>
+        
+<label class="photo-upload-box">
+  <input type="file" id="photoInput" accept="image/*" hidden>
 
-        <div class="photo-frame">
-          <div class="photo-glow" aria-hidden="true"></div>
-          <div class="photo-wrap">
-            <img id="stagePhoto" src="./assets/photo1.jpg" alt="Birthday memory for Ayesha">
-            <div class="photo-fallback" id="photoFallback" hidden>
-              <span>🌸</span>
-              <strong>A Special Memory</strong>
-              <small>Add the requested photo to the assets folder.</small>
-            </div>
-          </div>
-          <div class="photo-caption">A little moment, made brighter ✨</div>
-        </div>
-      </div>
+  <img id="stagePhoto" alt="Birthday memory for Ayesha" hidden>
+
+  <div id="uploadContent">
+    <div class="upload-icon">🌸</div>
+    <h3>Click To Add Your Memory</h3>
+    <p>Select any photo from your PC</p>
+    <span class="upload-button">Choose Photo</span>
+  </div>
+</label>
 
       <footer class="card-footer">
         <span>Made especially for Ayesha</span>
