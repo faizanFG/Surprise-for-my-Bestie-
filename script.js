@@ -217,55 +217,23 @@ document.addEventListener("DOMContentLoaded", () => {
   updateStage();
 });
 
-.photo-upload-box {
-  width: 100%;
-  height: 380px;
-  border: 1px solid rgba(255, 170, 210, 0.35);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
-  overflow: hidden;
-  position: relative;
-  background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,100,170,.03));
-  transition: .3s ease;
-}
+const photoInput = document.getElementById("photoInput");
+const stagePhoto = document.getElementById("stagePhoto");
+const uploadContent = document.getElementById("uploadContent");
 
-.photo-upload-box:hover {
-  transform: translateY(-3px);
-  border-color: #ff79b0;
-  box-shadow: 0 0 25px rgba(255, 100, 170, .25);
-}
+photoInput.addEventListener("change", function () {
+  const file = this.files[0];
 
-#stagePhoto {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  if (!file) return;
 
-.upload-icon {
-  font-size: 42px;
-  margin-bottom: 12px;
-}
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image file.");
+    return;
+  }
 
-#uploadContent h3 {
-  color: #ffd6e8;
-  margin: 0 0 8px;
-}
+  const imageURL = URL.createObjectURL(file);
 
-#uploadContent p {
-  color: #d99ab7;
-  margin-bottom: 18px;
-}
-
-.upload-button {
-  display: inline-block;
-  padding: 11px 24px;
-  border-radius: 30px;
-  background: linear-gradient(135deg, #ff4f9a, #ff82b8);
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 5px 20px rgba(255, 70, 150, .3);
-}
+  stagePhoto.src = imageURL;
+  stagePhoto.hidden = false;
+  uploadContent.style.display = "none";
+});
