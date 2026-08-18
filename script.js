@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
+  const SUPABASE_URL = "https://pdjoqjcmefomcyliszqx.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_kMGRjMEZPaEzmo4o92jPSA_XiWqdWQG";
+  const BUCKET = "birthday-photos";
+  const FILE_NAME = "birthday-memory.jpg";
+
   const stages = [
     {
       title: "Happy Birthday Dear Ayesha",
@@ -9,30 +14,22 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       title: "A Little Memory For You",
-      message: [
-        "May every beautiful memory bring a smile to your face and warmth to your heart. 🌸"
-      ],
+      message: ["May every beautiful memory bring a smile to your face and warmth to your heart. 🌸"],
       photo: "./assets/photo2.jpg"
     },
     {
       title: "Best Wishes For You",
-      message: [
-        "May your dreams become reality, your days become brighter, and your life be filled with endless happiness. ✨"
-      ],
+      message: ["May your dreams become reality, your days become brighter, and your life be filled with endless happiness. ✨"],
       photo: "./assets/photo3.jpg"
     },
     {
       title: "Your Special Surprise",
-      message: [
-        "Keep believing in yourself. Your best chapters are still waiting to be written. Never stop dreaming. 🦋"
-      ],
+      message: ["Keep believing in yourself. Your best chapters are still waiting to be written. Never stop dreaming. 🦋"],
       photo: "./assets/photo4.jpg"
     },
     {
       title: "For You, Ayesha",
-      message: [
-        "Keep smiling, keep growing, and keep shining. You deserve beautiful moments, peaceful days and every happiness life can bring. 💕"
-      ],
+      message: ["Keep smiling, keep growing, and keep shining. You deserve beautiful moments, peaceful days and every happiness life can bring. 💕"],
       photo: "./assets/photo5.jpg"
     },
     {
@@ -64,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentStage = 0;
   let isAnimating = false;
+  let uploadedPhotoURL = null;
 
   if (
     !surpriseCard ||
@@ -78,6 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ) {
     console.error("Birthday surprise: required HTML elements are missing.");
     return;
+  }
+
+  function getPermanentPhotoURL() {
+    return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${FILE_NAME}`;
   }
 
   function renderMessage(messages) {
@@ -105,14 +107,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setPhoto(path) {
+    const finalPath = uploadedPhotoURL || path;
+
     stagePhoto.classList.add("photo-changing");
 
     const newImage = new Image();
 
     newImage.onload = () => {
-      stagePhoto.src = path;
+      stagePhoto.src = finalPath;
       stagePhoto.alt = `Birthday memory for Ayesha — stage ${currentStage + 1}`;
       stagePhoto.hidden = false;
+
+      if (uploadContent) {
+        uploadContent.style.display = "none";
+      }
 
       requestAnimationFrame(() => {
         stagePhoto.classList.remove("photo-changing");
@@ -120,15 +128,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     newImage.onerror = () => {
-      stagePhoto.hidden = true;
       stagePhoto.classList.remove("photo-changing");
 
-      if (uploadContent) {
-        uploadContent.style.display = "flex";
+      if (!uploadedPhotoURL) {
+        stagePhoto.src = path;
+        stagePhoto.hidden = false;
       }
     };
 
-    newImage.src = path;
+    newImage.src = finalPath;
   }
 
   function updateStage() {
@@ -138,13 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
       `SURPRISE ${String(currentStage + 1).padStart(2, "0")} OF 06`;
 
     stageTitle.textContent = stage.title;
-
     renderMessage(stage.message);
-
     setPhoto(stage.photo);
-
     updateProgress();
-
     updateSignature();
 
     if (currentStage === stages.length - 1) {
@@ -159,14 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isAnimating) return;
 
     isAnimating = true;
-
     surpriseCard.classList.add("is-changing");
 
     window.setTimeout(() => {
       currentStage = nextStage;
-
       updateStage();
-
       surpriseCard.classList.remove("is-changing");
 
       const animatedElements = [
@@ -180,17 +181,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!element) return;
 
         element.classList.remove("stage-in");
-
         void element.offsetWidth;
-
         element.classList.add("stage-in");
       });
 
       window.setTimeout(() => {
         animatedElements.forEach((element) => {
-          if (element) {
-            element.classList.remove("stage-in");
-          }
+          if (element) element.classList.remove("stage-in");
         });
 
         isAnimating = false;
@@ -215,13 +212,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     confetti.innerHTML = "";
 
-    const pieces = 34;
-
-    for (let i = 0; i < pieces; i += 1) {
+    for (let i = 0; i < 34; i += 1) {
       const piece = document.createElement("span");
 
       piece.className = "confetti-piece";
-
       piece.style.left = `${Math.random() * 100}%`;
       piece.style.animationDelay = `${Math.random() * 0.35}s`;
       piece.style.animationDuration =
@@ -243,12 +237,84 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2800);
   }
 
-  nextButton.addEventListener("click", handleButtonClick);
+  async function loadSavedPhoto() {
+    const url = getPermanentPhotoURL();
 
-  /*
-    PROFESSIONAL PHOTO UPLOAD
-    Clicking the photo box opens the PC file picker.
-  */
+    const testImage = new Image();
+
+    testImage.onload = () => {
+      uploadedPhotoURL = `${url}?v=${Date.now()}`;
+      updateStage();
+    };
+
+    testImage.onerror = () => {
+      uploadedPhotoURL = null;
+      updateStage();
+    };
+
+    testImage.src = `${url}?v=${Date.now()}`;
+  }
+
+  async function uploadPhoto(file) {
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      return;
+    }
+
+    const uploadURL =
+      `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${FILE_NAME}`;
+
+    try {
+      if (uploadContent) {
+        uploadContent.style.display = "none";
+      }
+
+      stagePhoto.hidden = false;
+      stagePhoto.classList.add("photo-changing");
+
+      const response = await fetch(uploadURL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "apikey": SUPABASE_KEY,
+          "Content-Type": file.type,
+          "x-upsert": "true"
+        },
+        body: file
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(errorText);
+        throw new Error("Upload failed");
+      }
+
+      uploadedPhotoURL =
+        `${getPermanentPhotoURL()}?v=${Date.now()}`;
+
+      stagePhoto.onload = () => {
+        stagePhoto.classList.remove("photo-changing");
+        stagePhoto.hidden = false;
+      };
+
+      stagePhoto.src = uploadedPhotoURL;
+
+    } catch (error) {
+      console.error(error);
+
+      stagePhoto.classList.remove("photo-changing");
+
+      if (uploadContent) {
+        uploadContent.style.display = "flex";
+      }
+
+      stagePhoto.hidden = true;
+
+      alert("Photo upload failed. Please try again.");
+    }
+  }
+
+  nextButton.addEventListener("click", handleButtonClick);
 
   if (photoInput) {
     photoInput.addEventListener("change", function () {
@@ -256,32 +322,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!file) return;
 
-      if (!file.type.startsWith("image/")) {
-        alert("Please select an image file.");
-        return;
-      }
-
-      const imageURL = URL.createObjectURL(file);
-
-      stagePhoto.src = imageURL;
-      stagePhoto.alt = "Uploaded birthday memory for Ayesha";
-      stagePhoto.hidden = false;
-
-      if (uploadContent) {
-        uploadContent.style.display = "none";
-      }
+      uploadPhoto(file);
+      this.value = "";
     });
   }
 
   stagePhoto.addEventListener("error", () => {
-    stagePhoto.hidden = true;
-
-    if (uploadContent) {
-      uploadContent.style.display = "flex";
-    }
-
     stagePhoto.classList.remove("photo-changing");
   });
 
-  updateStage();
+  loadSavedPhoto();
 });
