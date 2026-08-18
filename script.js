@@ -9,22 +9,30 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       title: "A Little Memory For You",
-      message: ["May every beautiful memory bring a smile to your face and warmth to your heart. 🌸"],
+      message: [
+        "May every beautiful memory bring a smile to your face and warmth to your heart. 🌸"
+      ],
       photo: "./assets/photo2.jpg"
     },
     {
       title: "Best Wishes For You",
-      message: ["May your dreams become reality, your days become brighter, and your life be filled with endless happiness. ✨"],
+      message: [
+        "May your dreams become reality, your days become brighter, and your life be filled with endless happiness. ✨"
+      ],
       photo: "./assets/photo3.jpg"
     },
     {
       title: "Your Special Surprise",
-      message: ["Keep believing in yourself. Your best chapters are still waiting to be written. Never stop dreaming. 🦋"],
+      message: [
+        "Keep believing in yourself. Your best chapters are still waiting to be written. Never stop dreaming. 🦋"
+      ],
       photo: "./assets/photo4.jpg"
     },
     {
       title: "For You, Ayesha",
-      message: ["Keep smiling, keep growing, and keep shining. You deserve beautiful moments, peaceful days and every happiness life can bring. 💕"],
+      message: [
+        "Keep smiling, keep growing, and keep shining. You deserve beautiful moments, peaceful days and every happiness life can bring. 💕"
+      ],
       photo: "./assets/photo5.jpg"
     },
     {
@@ -45,12 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const stageTitle = document.getElementById("stageTitle");
   const stageMessage = document.getElementById("stageMessage");
   const stagePhoto = document.getElementById("stagePhoto");
-  const photoFallback = document.getElementById("photoFallback");
   const nextButton = document.getElementById("nextButton");
   const buttonText = document.getElementById("buttonText");
   const progressDots = Array.from(document.querySelectorAll(".dot"));
   const signature = document.getElementById("signature");
   const confetti = document.getElementById("confetti");
+
+  const photoInput = document.getElementById("photoInput");
+  const uploadContent = document.getElementById("uploadContent");
 
   let currentStage = 0;
   let isAnimating = false;
@@ -61,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
     !stageTitle ||
     !stageMessage ||
     !stagePhoto ||
-    !photoFallback ||
     !nextButton ||
     !buttonText ||
     !signature ||
@@ -73,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderMessage(messages) {
     stageMessage.innerHTML = "";
+
     messages.forEach((text) => {
       const paragraph = document.createElement("p");
       paragraph.innerHTML = text;
@@ -83,7 +93,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateProgress() {
     progressDots.forEach((dot, index) => {
       dot.classList.toggle("active", index === currentStage);
-      dot.setAttribute("aria-current", index === currentStage ? "step" : "false");
+      dot.setAttribute(
+        "aria-current",
+        index === currentStage ? "step" : "false"
+      );
     });
   }
 
@@ -92,8 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setPhoto(path) {
-    photoFallback.hidden = true;
-    stagePhoto.hidden = false;
     stagePhoto.classList.add("photo-changing");
 
     const newImage = new Image();
@@ -102,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
       stagePhoto.src = path;
       stagePhoto.alt = `Birthday memory for Ayesha — stage ${currentStage + 1}`;
       stagePhoto.hidden = false;
-      photoFallback.hidden = true;
 
       requestAnimationFrame(() => {
         stagePhoto.classList.remove("photo-changing");
@@ -111,8 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     newImage.onerror = () => {
       stagePhoto.hidden = true;
-      photoFallback.hidden = false;
       stagePhoto.classList.remove("photo-changing");
+
+      if (uploadContent) {
+        uploadContent.style.display = "flex";
+      }
     };
 
     newImage.src = path;
@@ -121,11 +134,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateStage() {
     const stage = stages[currentStage];
 
-    stageLabel.textContent = `SURPRISE ${String(currentStage + 1).padStart(2, "0")} OF 06`;
+    stageLabel.textContent =
+      `SURPRISE ${String(currentStage + 1).padStart(2, "0")} OF 06`;
+
     stageTitle.textContent = stage.title;
+
     renderMessage(stage.message);
+
     setPhoto(stage.photo);
+
     updateProgress();
+
     updateSignature();
 
     if (currentStage === stages.length - 1) {
@@ -138,12 +157,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function animateStageChange(nextStage) {
     if (isAnimating) return;
+
     isAnimating = true;
 
     surpriseCard.classList.add("is-changing");
 
     window.setTimeout(() => {
       currentStage = nextStage;
+
       updateStage();
 
       surpriseCard.classList.remove("is-changing");
@@ -152,20 +173,26 @@ document.addEventListener("DOMContentLoaded", () => {
         stageTitle,
         stageMessage,
         stageLabel,
-        stagePhoto.parentElement.parentElement
+        stagePhoto.parentElement
       ];
 
       animatedElements.forEach((element) => {
         if (!element) return;
+
         element.classList.remove("stage-in");
+
         void element.offsetWidth;
+
         element.classList.add("stage-in");
       });
 
       window.setTimeout(() => {
         animatedElements.forEach((element) => {
-          if (element) element.classList.remove("stage-in");
+          if (element) {
+            element.classList.remove("stage-in");
+          }
         });
+
         isAnimating = false;
       }, 650);
     }, 260);
@@ -192,12 +219,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < pieces; i += 1) {
       const piece = document.createElement("span");
+
       piece.className = "confetti-piece";
+
       piece.style.left = `${Math.random() * 100}%`;
       piece.style.animationDelay = `${Math.random() * 0.35}s`;
-      piece.style.animationDuration = `${1.2 + Math.random() * 1.1}s`;
-      piece.style.setProperty("--drift", `${-100 + Math.random() * 200}px`);
-      piece.style.transform = `rotate(${Math.random() * 180}deg)`;
+      piece.style.animationDuration =
+        `${1.2 + Math.random() * 1.1}s`;
+
+      piece.style.setProperty(
+        "--drift",
+        `${-100 + Math.random() * 200}px`
+      );
+
+      piece.style.transform =
+        `rotate(${Math.random() * 180}deg)`;
+
       confetti.appendChild(piece);
     }
 
@@ -206,33 +243,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2800);
   }
 
+  nextButton.addEventListener("click", handleButtonClick);
+
+  /*
+    PROFESSIONAL PHOTO UPLOAD
+    Clicking the photo box opens the PC file picker.
+  */
+
+  if (photoInput) {
+    photoInput.addEventListener("change", function () {
+      const file = this.files && this.files[0];
+
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file.");
+        return;
+      }
+
+      const imageURL = URL.createObjectURL(file);
+
+      stagePhoto.src = imageURL;
+      stagePhoto.alt = "Uploaded birthday memory for Ayesha";
+      stagePhoto.hidden = false;
+
+      if (uploadContent) {
+        uploadContent.style.display = "none";
+      }
+    });
+  }
+
   stagePhoto.addEventListener("error", () => {
     stagePhoto.hidden = true;
-    photoFallback.hidden = false;
+
+    if (uploadContent) {
+      uploadContent.style.display = "flex";
+    }
+
     stagePhoto.classList.remove("photo-changing");
   });
 
-  nextButton.addEventListener("click", handleButtonClick);
-
   updateStage();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const photoInput = document.getElementById("photoInput");
-  const stagePhoto = document.getElementById("stagePhoto");
-  const uploadContent = document.getElementById("uploadContent");
-
-  if (!photoInput || !stagePhoto || !uploadContent) return;
-
-  photoInput.addEventListener("change", function () {
-    const file = this.files[0];
-
-    if (!file || !file.type.startsWith("image/")) return;
-
-    const imageURL = URL.createObjectURL(file);
-
-    stagePhoto.src = imageURL;
-    stagePhoto.hidden = false;
-    uploadContent.style.display = "none";
-  });
 });
